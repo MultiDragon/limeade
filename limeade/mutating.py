@@ -22,6 +22,7 @@ before-and-after comparison to mutate.
 
 import builtins
 import types
+import ctypes
 
 __all__ = ['ClassHook', 'mutate_functions', 'mutate_class']
 
@@ -63,7 +64,14 @@ def mutate_class(cls, new_ns, new_bases):
     Mutate a given class (`cls`) with the new namespace and bases.
     """
 
-    # TODO: Bases not handled yet.
+    cell = new_ns.get('__classcell__')
+    if cell:
+        # TODO: this solution is not very stable and requires cpython,
+        # should test whether it does not cause crashes everywhere?
+        ctypes.pythonapi.PyCell_Set(
+            ctypes.py_object(cell),
+            ctypes.py_object(cls)
+        )
 
     mutate_functions(cls.__dict__, new_ns)
 
