@@ -16,7 +16,7 @@ into a reload instead of a reimport.
 
 import builtins
 import sys
-import importlib.machinery
+import importlib
 
 from .scanning import scan
 from .mutating import ClassHook, mutate_functions
